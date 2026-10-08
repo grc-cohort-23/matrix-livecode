@@ -1,5 +1,8 @@
-import java.util.ArrayList;
+
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ArrayList;
+
 
 public class SalamanderSearch {
     public static void main(String[] args) {
@@ -43,7 +46,89 @@ public class SalamanderSearch {
      * @return whether the salamander can reach the food
      * @throws IllegalArgumentException if the enclosure does not contain a salamander
      */
+    static int[] goal = new int[2];
+    static int[] salamander = new int[2];
     public static boolean canReach(char[][] enclosure) {
+        salamander = getSalamander(enclosure);
+        boolean[][] visited = new boolean[enclosure.length][enclosure[0].length];
+        // look between salamander and goal
+        // Check for walls with for(i = 0) loop
+        // if walls are present look for nearest open air block, then check again until air
+        // if path between air block and salamander has no walls, return true
+        return canReach(enclosure, visited, salamander);
+    }
+
+    public static boolean canReach(char[][] enclosure, boolean[][] visited, int[] current){
+        int curR = current[0];
+        int curC = current[1];
+        if(visited[curR][curC]) return false;
+        if(enclosure[curR][curC] == 'f') return true;
+
+        visited[curR][curC] = true;
+
+        List<int[]> neighbors = openSpaces(enclosure, current);
+        for(int[] neighbor : neighbors){
+            if(canReach(enclosure, visited, neighbor)) return true;
+        }
         return false;
+    }
+
+    private static List<int[]> openSpaces(char[][] enclosure, int[] current) {
+        int curR = current[0];
+        int curC = current[1];
+
+        int newR, newC;
+        List<int[]> possible = new ArrayList<>();
+
+        //Up
+        newR = curR - 1;
+        newC = curC;
+        if(newR >= 0 && enclosure[newR][newC] != 'W'){
+            possible.add(new int[]{newR, newC});
+        }
+
+        //Down
+        newR = curR + 1;
+        newC = curC;
+        if(newR < enclosure.length && enclosure[newR][newC] != 'W'){
+            possible.add(new int[]{newR, newC});
+        }
+
+        //Left
+        newR = curR;
+        newC = curC -1;
+        if(newC >= 0 && enclosure[newR][newC] != 'W'){
+            possible.add(new int[]{newR, newC});
+        }
+
+        //Right
+        newR = curR;
+        newC = curC + 1;
+        if(newC < enclosure[newR].length && enclosure[newR][newC] != 'W'){
+            possible.add(new int[]{newR, newC});
+        }
+
+        return new LinkedList<>();
+    }
+
+    private static int[] getGoal(char[][] enclosure) {
+        for(int i = 0; i < enclosure.length; i++){
+            for(int j = 0; j < enclosure[i].length; i++){
+                if(enclosure[i][j] == 'f'){
+                    return new int[]{i, j};
+                }
+            }
+        }
+        throw new IllegalArgumentException("No goal present");
+    }
+    private static int[] getSalamander(char[][] enclosure) {
+        for(int i = 0; i < enclosure.length; i++){
+            for(int j = 0; j < enclosure[i].length; i++){
+                if(enclosure[i][j] == 's'){
+                    return new int[]{i, j};
+                }
+            }
+        }
+        throw new IllegalArgumentException("No salamander present");
     }
 }
