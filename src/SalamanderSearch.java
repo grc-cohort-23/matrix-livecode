@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SalamanderSearch {
     public static void main(String[] args) {
@@ -44,6 +43,65 @@ public class SalamanderSearch {
      * @throws IllegalArgumentException if the enclosure does not contain a salamander
      */
     public static boolean canReach(char[][] enclosure) {
+        boolean[][] visited = new boolean[enclosure.length][enclosure[0].length];
+        Queue<int[]> q = new LinkedList<>();
+        int[] start = salamanderLocation(enclosure);
+        
+        q.offer(start);
+
+        while (!q.isEmpty()) {
+            int[] curPos = q.poll();
+            char curType = enclosure[curPos[0]][curPos[1]];
+            visited[curPos[0]][curPos[1]] = true;
+            if (curType == 'W') continue;
+            if (curType == 'f') return true;
+            for (var spot : possibleMoves(enclosure, curPos)) if (!visited[spot[0]][spot[1]]) q.offer(spot); 
+        }
+
         return false;
+    }
+
+    public static int[] salamanderLocation(char[][] enclosure) {
+        for (int i=0; i<enclosure.length; i++) {
+            for (int j=0; j<enclosure[0].length; j++) {
+                if (enclosure[i][j] == 's') return new int[] {i,j};
+            }
+        }
+        throw new IllegalArgumentException("Enclosure does not contain a mander");
+    }
+
+    public static List<int[]> possibleMoves(char[][] enclosure, int[] location) {
+        List<int[]> possible = new ArrayList<>();
+
+        int[][] checks = {
+            {location[0] + 1, location[1]},
+            {location[0] - 1, location[1]},
+            {location[0], location[1] + 1},
+            {location[0], location[1] - 1}
+        };
+
+        for (var spot : checks) {
+            // Check in bounds
+            if (spot[0] >= 0 && spot[0] < enclosure.length && spot[1] >= 0 && spot[1] < enclosure[0].length) {
+                // Check isn't wall
+                if (enclosure[spot[0]][spot[1]] != 'W') 
+                    possible.add(spot);
+            }
+        }
+
+        // if (location[0] + 1 < enclosure.length)
+        //     if (enclosure[location[0]+1][location[1]] != 'W')
+        //         possible.add(new int[] { location[0] + 1, location[1] });
+        // if (location[0] - 1 >= 0)
+        //     if (enclosure[location[0] - 1][location[1]] != 'W')
+        //         possible.add(new int[] { location[0] - 1, location[1] });
+        // if (location[1] + 1 < enclosure[0].length)
+        //     if (enclosure[location[0]][location[1] + 1] != 'W')
+        //         possible.add(new int[] { location[0], location[1] + 1 });
+        // if (location[1] - 1 >= 0)
+        //     if (enclosure[location[0]][location[1] - 1] != 'W')
+        //         possible.add(new int[] { location[0], location[1] - 1 });
+
+        return possible;
     }
 }
