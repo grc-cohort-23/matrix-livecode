@@ -34,52 +34,52 @@ public class SalamanderSearchTest {
         assertFalse(actual);
     }
 
-    // @Test
-    // public void testSalamanderLocation_centerOfGrid() {
-    //     char[][] enclosure = {
-    //         {'.', '.', '.'},
-    //         {'.', 's', '.'},
-    //         {'.', '.', '.'}
-    //     };
-    //     int[] expected = {1, 1};
-    //     assertArrayEquals(expected, SalamanderSearch.salamanderLocation(enclosure));
-    // }
+    @Test
+    public void testSalamanderLocation_centerOfGrid() {
+        char[][] enclosure = {
+            {'.', '.', '.'},
+            {'.', 's', '.'},
+            {'.', '.', '.'}
+        };
+        int[] expected = {1, 1};
+        assertArrayEquals(expected, SalamanderSearch.salamanderLocation(enclosure));
+    }
 
-    // @Test
-    // public void testSalamanderLocation_topLeftCorner() {
-    //     char[][] enclosure = {
-    //         {'s', '.', '.'},
-    //         {'.', '.', '.'},
-    //         {'.', '.', '.'}
-    //     };
-    //     int[] expected = {0, 0};
-    //     assertArrayEquals(expected, SalamanderSearch.salamanderLocation(enclosure));
-    // }
+    @Test
+    public void testSalamanderLocation_topLeftCorner() {
+        char[][] enclosure = {
+            {'s', '.', '.'},
+            {'.', '.', '.'},
+            {'.', '.', '.'}
+        };
+        int[] expected = {0, 0};
+        assertArrayEquals(expected, SalamanderSearch.salamanderLocation(enclosure));
+    }
 
-    // @Test
-    // public void testSalamanderLocation_notFound_throwsException() {
-    //     char[][] enclosure = {
-    //         {'.', '.', '.'},
-    //         {'.', '.', '.'},
-    //         {'.', '.', '.'}
-    //     };
-    //     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-    //         SalamanderSearch.salamanderLocation(enclosure);
-    //     });
-    //     assertEquals("No salamander present", exception.getMessage());
-    // }
+    @Test
+    public void testSalamanderLocation_notFound_throwsException() {
+        char[][] enclosure = {
+            {'.', '.', '.'},
+            {'.', '.', '.'},
+            {'.', '.', '.'}
+        };
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            SalamanderSearch.salamanderLocation(enclosure);
+        });
+        assertEquals("No salamander present", exception.getMessage());
+    }
 
 
-    // @Test
-    // public void testSalamanderLocation_at_1_2() {
-    //     char[][] enclosure = {
-    //         {'.', '.', '.'},
-    //         {'.', '.', 's'},
-    //         {'.', '.', '.'}
-    //     };
-    //     int[] expected = {1, 2};
-    //     assertArrayEquals(expected, SalamanderSearch.salamanderLocation(enclosure));
-    // }
+    @Test
+    public void testSalamanderLocation_at_1_2() {
+        char[][] enclosure = {
+            {'.', '.', '.'},
+            {'.', '.', 's'},
+            {'.', '.', '.'}
+        };
+        int[] expected = {1, 2};
+        assertArrayEquals(expected, SalamanderSearch.salamanderLocation(enclosure));
+    }
 
     // @Test
     // public void testPossibleMoves_allDirectionsOpen() {
