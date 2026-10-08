@@ -44,6 +44,83 @@ public class SalamanderSearch {
      * @throws IllegalArgumentException if the enclosure does not contain a salamander
      */
     public static boolean canReach(char[][] enclosure) {
+        int[] start = salamanderLocation(enclosure);
+        boolean[][] visited = new boolean[enclosure.length][enclosure[0].length];
+        return canReach(enclosure, visited, start);
+    }
+
+    public static boolean canReach(char[][] enclosure, boolean[][] visited, int[] current) {
+        int curRow = current[0];
+        int curColumn = current[1];
+
+        if (visited[curRow][curColumn]) return false;
+        if (enclosure[curRow][curColumn] == 'f') return true;
+        visited[curRow][curColumn] = true;
+
+        List<int[]> neighbors = possibleMoves(enclosure, current);
+        for (int[] neighbor : neighbors) {
+            if (canReach(enclosure, visited, neighbor)) {
+                return true;
+            }
+        }
+
         return false;
+    }
+
+    public static List<int[]> possibleMoves(char[][] enclosure, int[] current) {
+        int curRow = current[0];
+        int curColumn = current[1];
+
+        int newRow, newColumn;
+        List<int[]> possible = new ArrayList<>();
+
+        // UP
+        newRow = curRow - 1;
+        newColumn = curColumn;
+
+        if (newRow >= 0 && enclosure[newRow][newColumn] != 'W') {
+            possible.add(new int[]{newRow, newColumn});
+        }
+
+        // DOWN
+
+        newRow = curRow + 1;
+        newColumn = curColumn;
+
+        if (newRow < enclosure.length && enclosure[newRow][newColumn] != 'W') {
+            possible.add(new int[]{newRow, newColumn});
+        }
+
+        // LEFT
+
+        newRow = curRow;
+        newColumn = curColumn - 1;
+
+        if (newColumn >= 0 && enclosure[newRow][newColumn] != 'W') {
+            possible.add(new int[]{newRow, newColumn});
+        }
+
+        // RIGHT
+
+        newRow = curRow;
+        newColumn = curColumn + 1;
+
+        if (newColumn < enclosure[newRow].length && enclosure[newRow][newColumn] != 'W') {
+            possible.add(new int[]{newRow, newColumn});
+        }
+
+        return possible;
+    }
+
+    public static int[] salamanderLocation(char[][] enclosure) {
+        for (int row = 0; row < enclosure.length; row++) {
+            for (int column = 0; column < enclosure[row].length; column++) {
+                if (enclosure[row][column] == 's') {
+                    return new int[]{row, column};
+                }
+            }
+        }
+
+        throw new IllegalArgumentException("Your enclosure does not have a salamander.");
     }
 }
