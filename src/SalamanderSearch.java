@@ -44,6 +44,81 @@ public class SalamanderSearch {
      * @throws IllegalArgumentException if the enclosure does not contain a salamander
      */
     public static boolean canReach(char[][] enclosure) {
-        return false;
+        int[] start = salamanderLocation(enclosure);
+        boolean[][] visited = new boolean[enclosure.length][enclosure[0].length];
+        return canReach(enclosure, visited, start);
     }
+
+    public static boolean canReach(char[][] enclosure, boolean[][] visited, int[] current) {
+        int curX = current[0];
+        int curY = current[1];
+        if(visited[curX][curY]) return false;
+        if(enclosure[curX][curY] == 'f') return true;
+
+        visited[curX][curY] = true;
+
+        List<int[]> neighbors = possibleMoves(enclosure, current);
+
+        for(int[] neighbor : neighbors){
+           if(canReach(enclosure, visited, neighbor)) {
+            return true;
+           }
+        }
+        return false;
+
+    }
+
+    public static int[] salamanderLocation(char[][] enclosure) {
+        for(int row = 0; row < enclosure.length; row++){
+            for(int column = 0; column < enclosure[row].length; column++){
+                if(enclosure[row][column] == 's') {
+                    return new int[] {row,column};
+                }
+            }
+        }
+        throw new IllegalArgumentException("No salamander present");
+    }
+
+    public static List<int[]> possibleMoves(char[][] enclosure, int[] current) {
+        int curX = current[0];
+        int curY = current[1];
+
+        int newX, newY;
+        List<int[]> possible = new ArrayList<>();
+
+        // check Up move
+        newX = curX - 1;
+        newY = curY;
+
+        if(newX >= 0 && enclosure[newX][newY] != 'W') {
+            possible.add(new int[]{newX,newY});
+        }
+
+        //check Down move
+        newX = curX + 1;
+        newY = curY;
+        if(newX < enclosure.length && enclosure[newX][newY] != 'W'){
+            possible.add(new int[]{newX, newY});
+        }
+
+        //check Left move
+        newX = curX;
+        newY = curY - 1;
+
+        if(newY >= 0 && enclosure[newX][newY] != 'W'){
+            possible.add(new int[]{newX, newY});
+        }
+
+        //check Right move
+        newX = curX;
+        newY = curY + 1;
+        if(newY < enclosure[newX].length && enclosure[newX][newY] != 'W'){
+            possible.add(new int[]{newX, newY});
+        }
+
+        
+    return possible;
+
+    }
+
 }
